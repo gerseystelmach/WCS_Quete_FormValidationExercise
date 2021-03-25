@@ -3,7 +3,8 @@
 $subjects = ['Plainte' => 'Plainte', 'Suggestion' => 'Suggestion', 'Information' => 'Information', 'Emploi' => 'Emploi'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+    
+    // Loop to transform the data from superglobal variable into another variable
     foreach ($_POST as $key => $value) {
         $data[$key] = trim($value);
 
@@ -11,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = []; //array to file all the message errors
 
+    // Verification of the inputs to check if they are not empty
     if (empty($data['userFirstName'])) {
         $errors[] = 'Le prénom est obligatoire.';
     }
@@ -25,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
    
+    // Verification of the inputs to limit the length of the content
+    
     $userFirstNameLength = 50;
     if (strlen($data['userFirstName']) > $userFirstNameLength) {
         $errors[] = "Le nom doit avoir moins de " . $userFirstNameLength . " caractères.";
@@ -35,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
   
+    // Filter applied to check if the phone and email have a good format, otherwise a error will be shown
+    
     if (!filter_var($data['userEmail'], FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Le format d'email n'est pas valable.";
     }
@@ -43,10 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Le format de téléphone n'est pas valable.";
     }
 
-
+    // Verification if any change was made on the options from select, otherwise an error message will be shown
     if (!in_array($data['reasonContact'], $subjects)) {
         $errors[] = "La raison de son contact n'est pas valable.";
     }
+    
+    //If no errors were detected in the form, the user will be redirected to the thanks.php
 
     if (empty($errors)) {
         header('Location: thanks.php');
@@ -118,22 +126,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 foreach ($subjects as $label => $subject) { ?>
                     <option value="<?= $subject ?>"><?= $label ?></option>
 
-
-
                 <?php }; ?>
 
-
-
             </select>
-
 
             <input type="submit" value="Envoyer">
 
         </form>
-
-
-
-    </section>
+   </section>
 </body>
-
 </html>
